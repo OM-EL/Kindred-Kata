@@ -1,7 +1,10 @@
 package com.kindredgroup.unibetlivetest.exception;
 
 import com.kindredgroup.unibetlivetest.dto.ExceptionDto;
+import com.kindredgroup.unibetlivetest.types.ExceptionType;
 import com.kindredgroup.unibetlivetest.utils.ServiceConstants;
+import org.springframework.core.convert.ConversionFailedException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -31,7 +34,16 @@ public class ExceptionHttpTranslator {
         ExceptionDto dto = new ExceptionDto()
                 .setErrormessage(e.getMessage())
                 .setPath(request.getServletPath());
-        return new ResponseEntity<>(dto, e.getException().getHttpStatus());
+
+        return buildResponseEntity(dto, e.getException());
+    }
+
+    private ResponseEntity<ExceptionDto> buildResponseEntity(ExceptionDto dto, ExceptionType exceptionType) {
+        if (exceptionType.isCustom()) {
+            return ResponseEntity.status(exceptionType.getStatusCode()).body(dto);
+        } else {
+            return new ResponseEntity<>(dto, HttpStatus.valueOf(exceptionType.getStatusCode()));
+        }
     }
 
     /**
@@ -44,7 +56,8 @@ public class ExceptionHttpTranslator {
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
             HttpMessageNotReadableException.class,
-            MethodArgumentTypeMismatchException.class
+            MethodArgumentTypeMismatchException.class,
+            ConversionFailedException.class
     })
     public ResponseEntity<ExceptionDto> handleBadRequestException(HttpServletRequest request, Exception ex) {
         ExceptionDto dto = new ExceptionDto()
@@ -52,6 +65,7 @@ public class ExceptionHttpTranslator {
                 .setPath(request.getContextPath());
         return new ResponseEntity<>(dto, ServiceConstants.BAD_REQUEST_STATUS);
     }
+
 
     /**
      * Catches all unhandled exceptions across the application.

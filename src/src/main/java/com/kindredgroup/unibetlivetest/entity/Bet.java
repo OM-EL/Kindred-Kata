@@ -29,15 +29,18 @@ public class Bet {
     private Selection selection;
 
 
-    @Column(name = "bet_state")
+    @Column(name = "state")
     @Enumerated(EnumType.STRING)
     State state;
 
     @Column(name = "stake")
     private BigDecimal stake;
 
-    @Column(name = "state")
+    @Column(name = "bet_state")
     private BetState betState;
+
+    @Column(name = "odd")
+    BigDecimal betsOdds;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

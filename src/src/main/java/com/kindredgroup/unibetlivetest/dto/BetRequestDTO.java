@@ -2,6 +2,7 @@ package com.kindredgroup.unibetlivetest.dto;
 
 import com.kindredgroup.unibetlivetest.entity.Bet;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -10,10 +11,11 @@ import java.math.BigDecimal;
  * This class captures all necessary details for a betting operation.
  */
 @Data
+@NoArgsConstructor
 public class BetRequestDTO {
 
     private Long selectionId;          // ID of the selection being bet on
-    private BigDecimal currentOdd;     // Current odd for the selection
+    private BigDecimal cote;     // Current odd for the selection
     private Long customerId;           // ID of the customer placing the bet
     private BigDecimal mise;           // Amount staked by the customer
 
@@ -24,7 +26,7 @@ public class BetRequestDTO {
      */
     public BetRequestDTO(Bet bet) {
         this.selectionId = bet.getSelection().getId();
-        this.currentOdd = bet.getSelection().getCurrentOdd();
+        this.cote = bet.getSelection().getCurrentOdd();
         this.customerId = bet.getCustomer().getId();
         this.mise = bet.getStake();
     }

@@ -29,15 +29,22 @@ import static java.lang.String.format;
 @Service
 @RequiredArgsConstructor
 public class BetsService {
+
     private final BetRepository betRepository;
     private final SelectionRepository selectionRepository;
     private final CustomerRepository customerRepository;
 
+    /**
+     * Registers a new bet based on the provided bet request.
+     *
+     * @param betRequestDTO The bet request data.
+     * @return The saved bet as a DTO.
+     */
     public BetRequestDTO addBet(BetRequestDTO betRequestDTO) {
         Selection selection = getSelection(betRequestDTO.getSelectionId());
         Customer customer = getCustomer(betRequestDTO.getCustomerId());
 
-        validateCurrentOdd(selection, betRequestDTO.getCurrentOdd());
+        validateCurrentOdd(selection, betRequestDTO.getCote());
         validateSelectionState(selection);
         validateCustomerBalance(customer, betRequestDTO.getMise());
         validateDuplicateBet(betRequestDTO);
@@ -45,9 +52,15 @@ public class BetsService {
         deductAndSaveCustomerBalance(customer, betRequestDTO.getMise());
 
         Bet bet = prepareBet(betRequestDTO);
-        return new BetRequestDTO(betRepository.save(bet));
+        betRepository.save(bet);
+        return betRequestDTO;
     }
 
+    /**
+     * Closes all eligible bets.
+     *
+     * @return List of IDs of bets that were closed.
+     */
     public List<Long> closeBets() {
         List<Bet> bets = betRepository.findByStateAndSelection_State(State.OPENED, State.CLOSED);
         return bets.stream()
@@ -60,6 +73,7 @@ public class BetsService {
     @Transactional
     protected void closeBetAndPayTheClient(Bet bet) {
         bet.setState(State.CLOSED);
+        bet.setBetState((bet.getBetState() == null || bet.getBetState().equals(BetState.WON))?BetState.WON : BetState.LOST);
         betRepository.save(bet);
         if (bet.getBetState().equals(BetState.WON)) {
             addAndSaveCustomerBalance(bet.getCustomer(), bet.getStake().multiply(bet.getSelection().getCurrentOdd()));
@@ -104,6 +118,9 @@ public class BetsService {
         Bet bet = new Bet();
         bet.setDate(new Date());
         bet.setStake(betRequestDTO.getMise());
+        bet.setState(State.OPENED);
+        bet.setBetsOdds(betRequestDTO.getCote());
+
         bet.setCustomer(new Customer().setId(betRequestDTO.getCustomerId()));
         bet.setSelection(new Selection().setId(betRequestDTO.getSelectionId()));
         return bet;

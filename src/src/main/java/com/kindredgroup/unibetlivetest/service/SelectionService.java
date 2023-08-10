@@ -87,7 +87,7 @@ public class SelectionService {
     private void validateSelectionsExist(List<Selection> selections) {
         if (selections.isEmpty()) {
             log.error(NO_SELECTIONS_FOUND_ERROR_MESSAGE);
-            throw new CustomException(NO_SELECTIONS_FOUND_ERROR_MESSAGE, ExceptionType.SELECTION_NOT_FOUND);
+            throw new CustomException(NO_SELECTIONS_FOUND_ERROR_MESSAGE, ExceptionType.SELECTIONS_NOT_FOUND);
         }
     }
 }
