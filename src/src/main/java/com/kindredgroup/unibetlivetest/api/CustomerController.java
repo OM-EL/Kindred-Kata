@@ -13,15 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 @RequestMapping(Urls.BASE_PATH)
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
-public class CustomerApi {
+@CrossOrigin(origins = "*")  // Consider limiting origins in production for security.
+public class CustomerController {
 
     private final CustomerService customerService;
 
+    /**
+     * Retrieves the customer with the pseudo "unibest".
+     *
+     * @return Customer with the specified pseudo.
+     */
     @GetMapping(Urls.CURRENT_CUSTOMER)
     public Customer fetchCustomer() {
         return customerService.findCustomerByPseudo("unibest");
     }
-
-
 }

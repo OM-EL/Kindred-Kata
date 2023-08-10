@@ -1,6 +1,6 @@
 package com.kindredgroup.unibetlivetest.types;
 
-public enum SelectionState {
+public enum State {
     OPENED,
     CLOSED,
 

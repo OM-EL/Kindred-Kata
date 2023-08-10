@@ -1,7 +1,8 @@
 package com.kindredgroup.unibetlivetest.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.kindredgroup.unibetlivetest.types.SelectionResult;
-import com.kindredgroup.unibetlivetest.types.SelectionState;
+import com.kindredgroup.unibetlivetest.types.State;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -26,7 +27,7 @@ public class Selection {
 
     @Column(name = "state")
     @Enumerated(EnumType.STRING)
-    SelectionState state;
+    State state;
 
     @Column(name = "result")
     @Enumerated(EnumType.STRING)
@@ -34,6 +35,7 @@ public class Selection {
 
     @ManyToOne
     @JoinColumn(name = "market_id")
+    @JsonBackReference
     Market market;
 
 }

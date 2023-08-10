@@ -1,9 +1,7 @@
 package com.kindredgroup.unibetlivetest.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
@@ -30,7 +28,8 @@ public class Event {
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
 
-    @JsonIgnore
+
     @OneToMany(targetEntity=Market.class, mappedBy="event", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Market> markets = new ArrayList<>();
 }

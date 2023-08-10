@@ -8,7 +8,7 @@ import com.kindredgroup.unibetlivetest.repository.CustomerRepository;
 import com.kindredgroup.unibetlivetest.repository.EventRepository;
 import com.kindredgroup.unibetlivetest.repository.MarketRepository;
 import com.kindredgroup.unibetlivetest.repository.SelectionRepository;
-import com.kindredgroup.unibetlivetest.types.SelectionState;
+import com.kindredgroup.unibetlivetest.types.State;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -40,17 +40,17 @@ public class DataPopulate {
 
         selectionRepository.save(new Selection()
                 .setName("Unibet IT gagne")
-                .setState(SelectionState.OPENED) // Etat ouvert, prêt pour prise de pari
+                .setState(State.OPENED) // Etat ouvert, prêt pour prise de pari
                 .setCurrentOdd(new BigDecimal("20.7")) //Cote
                 .setMarket(marketResultatDuMatch));
         selectionRepository.save(new Selection()
                 .setName("Real madrid gagne")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("1.3"))
                 .setMarket(marketResultatDuMatch));
         selectionRepository.save(new Selection()
                 .setName("Match Nul")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("4.4"))
                 .setMarket(marketResultatDuMatch));
 
@@ -60,42 +60,42 @@ public class DataPopulate {
 
         selectionRepository.save(new Selection()
                 .setName("Sabri")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("1.8"))
                 .setMarket(marketScorer));
         selectionRepository.save(new Selection()
                 .setName("Enzo")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("1.6"))
                 .setMarket(marketScorer));
         selectionRepository.save(new Selection()
                 .setName("Eric")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("1.5"))
                 .setMarket(marketScorer));
         selectionRepository.save(new Selection()
                 .setName("Ons")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("2.6"))
                 .setMarket(marketScorer));
         selectionRepository.save(new Selection()
                 .setName("Ki cheuk")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("25"))
                 .setMarket(marketScorer));
         selectionRepository.save(new Selection()
                 .setName("K. Benzema")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("1.4"))
                 .setMarket(marketScorer));
         selectionRepository.save(new Selection()
                 .setName("E. Hazard")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("3.2"))
                 .setMarket(marketScorer));
         selectionRepository.save(new Selection()
                 .setName("Isco")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("6.4"))
                 .setMarket(marketScorer));
 
@@ -105,57 +105,57 @@ public class DataPopulate {
 
         selectionRepository.save(new Selection()
                 .setName("Guillaume")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("30"))
                 .setMarket(scoreMoreThanMessi));
         selectionRepository.save(new Selection()
                 .setName("Maxime")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("40"))
                 .setMarket(scoreMoreThanMessi));
         selectionRepository.save(new Selection()
                 .setName("Thomas")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("50"))
                 .setMarket(scoreMoreThanMessi));
         selectionRepository.save(new Selection()
                 .setName("Enzo")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("60"))
                 .setMarket(scoreMoreThanMessi));
         selectionRepository.save(new Selection()
                 .setName("Murat")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("70"))
                 .setMarket(scoreMoreThanMessi));
         selectionRepository.save(new Selection()
                 .setName("Henri")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("80"))
                 .setMarket(scoreMoreThanMessi));
         selectionRepository.save(new Selection()
                 .setName("Ons")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("90"))
                 .setMarket(scoreMoreThanMessi));
         selectionRepository.save(new Selection()
                 .setName("Sabri")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("100"))
                 .setMarket(scoreMoreThanMessi));
         selectionRepository.save(new Selection()
                 .setName("Isma")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("110"))
                 .setMarket(scoreMoreThanMessi));
         selectionRepository.save(new Selection()
                 .setName("Eric")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("999999"))
                 .setMarket(scoreMoreThanMessi));
         selectionRepository.save(new Selection()
                 .setName("Louis")
-                .setState(SelectionState.OPENED)
+                .setState(State.OPENED)
                 .setCurrentOdd(new BigDecimal("10000000"))
                 .setMarket(scoreMoreThanMessi));
     }
