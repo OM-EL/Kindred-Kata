@@ -33,6 +33,9 @@ public class Selection {
     @Enumerated(EnumType.STRING)
     SelectionResult result;
 
+    @Version
+    private Long version;
+
     @ManyToOne
     @JoinColumn(name = "market_id")
     @JsonBackReference

@@ -79,6 +79,8 @@ public class ExceptionHttpTranslator {
         ExceptionDto dto = new ExceptionDto()
                 .setErrormessage(ex.getMessage())
                 .setPath(request.getContextPath());
+        System.out.println("-------------------------->");
+        System.out.println(ex);
         return new ResponseEntity<>(dto, ServiceConstants.INTERNAL_SERVER_ERROR_STATUS);
     }
 }

@@ -2,7 +2,6 @@ package com.kindredgroup.unibetlivetest.entity;
 
 import com.kindredgroup.unibetlivetest.types.BetState;
 import com.kindredgroup.unibetlivetest.types.State;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,7 +18,7 @@ public class Bet {
     private Long id;
 
     @Column(name = "name")
-    private int c;
+    private int name;
 
     @Column(name = "date")
     private Date date;

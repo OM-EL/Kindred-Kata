@@ -32,6 +32,7 @@ public class DataPopulate {
 
         /** 1. On crée l'évenement */
         final Event realMadridVsPsg = eventRepository.save(new Event().setName("Unibet IT vs Real madrid").setStartDate(new Date()));
+        final Event BarcaVsPsg = eventRepository.save(new Event().setName("Unibet IT vs Barca").setStartDate(new Date()));
 
         /** 2. On crée un marché 'resultat du match' ==> qui va gagner le match (ou match nul) **/
         final Market marketResultatDuMatch = marketRepository.save(new Market().setName("Résultat du match").setEvent(realMadridVsPsg));

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -41,20 +42,24 @@ public class BetsService {
      * @return The saved bet as a DTO.
      */
     public BetRequestDTO addBet(BetRequestDTO betRequestDTO) {
-        Selection selection = getSelection(betRequestDTO.getSelectionId());
-        Customer customer = getCustomer(betRequestDTO.getCustomerId());
+        try {
+            Selection selection = validateSelectionState(betRequestDTO.getSelectionId());
+            Customer customer = validateAndFetchCustomer(betRequestDTO.getCustomerId(), betRequestDTO.getMise());
+            validateCurrentOdd(selection, betRequestDTO.getCote());
 
-        validateCurrentOdd(selection, betRequestDTO.getCote());
-        validateSelectionState(selection);
-        validateCustomerBalance(customer, betRequestDTO.getMise());
-        validateDuplicateBet(betRequestDTO);
+            validateDuplicateBet(betRequestDTO);
 
-        deductAndSaveCustomerBalance(customer, betRequestDTO.getMise());
+            deductAndSaveCustomerBalance(customer, betRequestDTO.getMise());
 
-        Bet bet = prepareBet(betRequestDTO);
-        betRepository.save(bet);
-        return betRequestDTO;
+            Bet bet = prepareBet(betRequestDTO);
+            betRepository.save(bet);
+            return betRequestDTO;
+        } catch (OptimisticLockException ole) {
+            // Handle the exception, maybe retry or inform the user
+            throw new CustomException(ServiceConstants.THE_ODDS_FOR_THE_SELECTION_HAVE_CHANGED_PLEASE_TRY_AGAIN, ExceptionType.ODD_CHANGED);
+        }
     }
+
 
     /**
      * Closes all eligible bets.
@@ -96,16 +101,34 @@ public class BetsService {
         }
     }
 
-    private void validateSelectionState(Selection selection) {
+    private Selection validateSelectionState(Long selectionId) {
+        if( selectionId == null ) {
+            throw new CustomException(ServiceConstants.SELECTION_NOT_FOUND_TEMPLATE, ExceptionType.BAD_REQUEST);
+        }
+
+        Selection selection = selectionRepository.findById(selectionId)
+                .orElseThrow(() -> new CustomException(ServiceConstants.CUSTOMER_NOT_FOUND_TEMPLATE, ExceptionType.SELECTION_NOT_FOUND));
+
+
         if (selection.getState() == State.CLOSED) {
             throw new CustomException(ServiceConstants.SELECTION_CLOSED_MESSAGE, ExceptionType.SELECTION_CLOSED);
         }
+        return selection;
     }
 
-    private void validateCustomerBalance(Customer customer, BigDecimal stake) {
+    private Customer validateAndFetchCustomer(Long customerId, BigDecimal stake) {
+        if (customerId == null) {
+            throw new CustomException(ServiceConstants.CUSTOMER_NOT_FOUND_TEMPLATE, ExceptionType.BAD_REQUEST);
+        }
+
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new CustomException(ServiceConstants.CUSTOMER_NOT_FOUND_TEMPLATE, ExceptionType.CUSTOMER_NOT_FOUND));
+
         if (stake.compareTo(customer.getBalance()) > 0) {
             throw new CustomException(ServiceConstants.INSUFFICIENT_BALANCE_MESSAGE, ExceptionType.INSUFFICIENT_BALANCE);
         }
+
+        return customer;
     }
 
     private void validateDuplicateBet(BetRequestDTO betRequestDTO) {
@@ -121,8 +144,12 @@ public class BetsService {
         bet.setState(State.OPENED);
         bet.setBetsOdds(betRequestDTO.getCote());
 
-        bet.setCustomer(new Customer().setId(betRequestDTO.getCustomerId()));
-        bet.setSelection(new Selection().setId(betRequestDTO.getSelectionId()));
+        Selection selection = getSelection(betRequestDTO.getSelectionId());
+        Customer customer = getCustomer(betRequestDTO.getCustomerId());
+
+        bet.setCustomer(customer);
+        bet.setSelection(selection);
+
         return bet;
     }
 

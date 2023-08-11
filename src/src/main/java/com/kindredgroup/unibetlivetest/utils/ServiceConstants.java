@@ -31,6 +31,7 @@ public final class ServiceConstants {
 
     // Config related constants
     public static final String BATCH_EXECUTION_INTERVAL_PROP = "${batch.execution.interval:5000}";
+    public static final String THE_ODDS_FOR_THE_SELECTION_HAVE_CHANGED_PLEASE_TRY_AGAIN = "The odds for the selection have changed. Please try again.";
 
     // Private constructor to prevent instantiation
     private ServiceConstants() {

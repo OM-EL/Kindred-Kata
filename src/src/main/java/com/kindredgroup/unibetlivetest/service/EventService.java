@@ -1,6 +1,7 @@
 package com.kindredgroup.unibetlivetest.service;
 
 import com.kindredgroup.unibetlivetest.dto.EventDTO;
+import com.kindredgroup.unibetlivetest.entity.Event;
 import com.kindredgroup.unibetlivetest.entity.Selection;
 import com.kindredgroup.unibetlivetest.exception.CustomException;
 import com.kindredgroup.unibetlivetest.repository.EventRepository;
@@ -36,7 +37,7 @@ public class EventService {
 
         if (events.isEmpty()) {
             log.warn(String.format(ServiceConstants.NO_EVENTS_FOUND_LOG_TEMPLATE, isLive));
-            throw new CustomException(ServiceConstants.NO_EVENTS_FOUND_EXCEPTION_MESSAGE, ExceptionType.EVENT_NOT_FOUND);
+            throw new CustomException(ServiceConstants.NO_EVENTS_FOUND_EXCEPTION_MESSAGE, ExceptionType.EVENTS_NOT_FOUND);
         }
 
         return events;
@@ -61,14 +62,13 @@ public class EventService {
      * @return A set of EventDTOs corresponding to the given live state.
      */
     private Set<EventDTO> getEventsByLiveState(Boolean isLive) {
-        State state = isLive ? State.OPENED : State.CLOSED;
-
-        return selectionRepository.getSelectionByStateEquals(state)
-                .stream()
-                .filter(this::isValidSelection)
-                .map(selection -> selection.getMarket().getEvent())
-                .map(EventDTO::new)
-                .collect(Collectors.toSet());
+        if (isLive) {
+            List<Event> liveEvents = eventRepository.findEventsBySelectionState(State.OPENED);
+            return liveEvents.stream().map(EventDTO::new).collect(Collectors.toSet());
+        } else {
+            List<Event> notLiveEvents = eventRepository.findEventsWithoutSelectionState(State.OPENED);
+            return notLiveEvents.stream().map(EventDTO::new).collect(Collectors.toSet());
+        }
     }
 
     /**

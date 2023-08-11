@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SelectionBatch {
 
-    private static final long UPDATE_ODDS_INTERVAL = 20000L; // 5 seconds in milliseconds
-    private static final long CLOSE_ODDS_INTERVAL = 1000L * 60; // 1 minute in milliseconds
+    private static final long UPDATE_ODDS_INTERVAL = 600000L; // 5 seconds in milliseconds
+    private static final long CLOSE_ODDS_INTERVAL = 20000L * 60; // 1 minute in milliseconds
 
     private final SelectionService selectionService;
 
@@ -21,7 +21,7 @@ public class SelectionBatch {
      * Scheduled task to update odds for selections at a fixed rate.
      * This method updates the odds randomly every 5 seconds.
      */
-    @Scheduled(fixedRate = UPDATE_ODDS_INTERVAL)
+    @Scheduled( initialDelay =  UPDATE_ODDS_INTERVAL , fixedRate = UPDATE_ODDS_INTERVAL)
     public void updateOddsRandomly() {
         log.info(ServiceConstants.UPDATE_LOG_MESSAGE_TEMPLATE, selectionService.updateOddsRandomly());
     }
@@ -30,7 +30,7 @@ public class SelectionBatch {
      * Scheduled task to close odds for selections at a fixed rate.
      * This method closes the odds randomly every minute.
      */
-    @Scheduled(fixedRate = CLOSE_ODDS_INTERVAL)
+    @Scheduled( initialDelay =  CLOSE_ODDS_INTERVAL , fixedRate = CLOSE_ODDS_INTERVAL)
     public void closeOddsRandomly() {
         log.info(ServiceConstants.CLOSE_LOG_MESSAGE_TEMPLATE, selectionService.closeOddsRandomly());
     }

@@ -1,6 +1,7 @@
 package com.kindredgroup.unibetlivetest.dto;
 
 import com.kindredgroup.unibetlivetest.entity.Bet;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class BetRequestDTO {
 
     private Long selectionId;          // ID of the selection being bet on
