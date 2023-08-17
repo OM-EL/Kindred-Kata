@@ -54,7 +54,7 @@ Here are the step-by-step instructions to get the application running on your lo
     - Use Maven to compile and run the application. Run this command in your terminal:
 
         ```bash
-        mvn spring-boot:run
+        mvn clean package && java -jar target/unibet-live-test-0.0.1-SNAPSHOT.jar
         ```
 
 
