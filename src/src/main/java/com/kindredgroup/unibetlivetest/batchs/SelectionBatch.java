@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SelectionBatch {
 
-    private static final long UPDATE_ODDS_INTERVAL = 600000L; // 5 seconds in milliseconds
-    private static final long CLOSE_ODDS_INTERVAL = 20000L * 60; // 1 minute in milliseconds
+    private static final long UPDATE_ODDS_INTERVAL = 5000L; // 5 seconds in milliseconds
+    private static final long CLOSE_ODDS_INTERVAL = 1000L * 60; // 1 minute in milliseconds
 
     private final SelectionService selectionService;
 
